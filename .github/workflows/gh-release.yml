@@ -29,13 +29,13 @@ jobs:
         run: npm run build
 
       - name: Zip build artifacts
-        run: zip -r ollama-webui-lite.zip ./build
+        run: mv build ${{ github.repository }} && zip -r ${{ github.repository }}.zip ./${{ github.repository }}
 
       - name: Create Release
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          name: Release ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           body: "## Release ${{ github.ref_name }}\n\nDownload the Ollama WebUI Lite build to manually deploy to your webserver."
           tag: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -48,6 +48,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./ollama-webui-lite-${{ github.ref_name }}.zip
-          asset_name: ollama-webui-lite-${{ github.ref_name }}.zip
+          asset_path: ./${{ github.repository }}-${{ github.ref_name }}.zip
+          asset_name: ${{ github.repository }}-${{ github.ref_name }}.zip
           asset_content_type: application/zip
