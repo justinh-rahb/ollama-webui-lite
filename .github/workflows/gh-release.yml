@@ -63,13 +63,10 @@ jobs:
           prerelease: true
 
       - name: Upload Build ZIP to Release
-        uses: actions/upload-artifact@v2
+        uses: softprops/action-gh-release@v1
         with:
-          name: ollama-webui-lite.zip
-          path: ./ollama-webui-lite.zip
-
-      - name: Upload Build TAR.GZ to Release
-        uses: actions/upload-artifact@v2
-        with:
-          name: ollama-webui-lite.tar.gz
-          path: ./ollama-webui-lite.tar.gz
+          files: |
+            ollama-webui-lite.zip
+            ollama-webui-lite.tar.gz
+          token: ${{ secrets.GITHUB_TOKEN }}
+        if: startsWith(github.ref, 'refs/tags/')
