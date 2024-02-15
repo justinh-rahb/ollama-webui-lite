@@ -28,8 +28,15 @@ jobs:
       - name: Build with Vite.js
         run: npm run build
 
+      - name: Prepare build directory
+        run: mv build ollama-webui-lite
+
       - name: Zip build artifacts
-        run: mv build ollama-webui-lite && zip -r ollama-webui-lite.zip ./ollama-webui-lite
+        run: zip -r ollama-webui-lite.zip ./ollama-webui-lite
+
+      - name: Tar and Gzip build artifacts
+        run: tar -czvf ollama-webui-lite.tar.gz ./ollama-webui-lite
+        # Creates a .tar.gz file of the build directory
 
       - name: Create Release
         id: create_release
@@ -51,3 +58,13 @@ jobs:
           asset_path: ./ollama-webui-lite.zip
           asset_name: ollama-webui-lite.zip
           asset_content_type: application/zip
+
+      - name: Upload Build TAR.GZ to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./ollama-webui-lite.tar.gz
+          asset_name: ollama-webui-lite.tar.gz
+          asset_content_type: application/gzip
