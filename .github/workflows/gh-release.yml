@@ -29,7 +29,7 @@ jobs:
         run: npm run build
 
       - name: Zip build artifacts
-        run: mv build ollama-webui-lite && zip -r ollama-webui-lite.zip ./ollama-webui-lite
+        run: mv build ollama-webui-lite && zip -r ollama-webui-lite-${{ github.ref_name }}.zip ./ollama-webui-lite
 
       - name: Create Release
         id: create_release
